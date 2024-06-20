@@ -74,69 +74,14 @@ assignin('base', 'sensorsBus', sensorsBus);
 % Setting UP integration test 
 % Test SG1 and 2
 % Define time instants and corresponding signal values
-% Initialize output vector with zeros
-S3 = zeros(1, 100);
-% Define segments and their values
-segments = [
-    0,  10,  0;  % 0 from 0 to 10 seconds
-    10, 17,  2;  % 2 from 10 to 17 seconds
-    17, 30,  0;  % 0 from 17 to 30 seconds
-    30, 35,  2;  % 2 from 30 to 35 seconds
-    35, 60,  0;  % 0 from 35 to 60 seconds
-    60, 75,  2;  % 2 from 60 to 75 seconds
-    75, 100, 0   % 0 from 75 to 100 seconds
-];
+timeValues = [0, 10, 17, 30, 35, 60, 75];  % Time instants
+dataValues = [0, 2, 0, 2, 0, 2, 0];  % Signal values
 
-% Loop through segments and assign values to signalVector
-for i = 1:size(segments, 1)
-    startIndex = segments(i, 1) + 1;  % Adjust index (starting from 1)
-    endIndex = segments(i, 2);
-    value = segments(i, 3);
-    S3(startIndex:endIndex) = value;
-end
-% Assign to base workspace (if needed)
-assignin('base', 'S3', S3);  % Assign S3 to base workspace
-% Initialize output vector with zeros
-S2 = zeros(1, 100);
+% Create structure for Simulink input
+S3.time = timeValues;
+S3.signals.values = dataValues;
+assignin ('base', 'S3', X_air*50/3.6) %Ns^2/m^2
 
-% Define time and output values
-timeValues = [0 10 15 30 35];
-outputValues = [0 1 0 1 0];
-
-% Iterate through time intervals and assign output values
-for i = 1:length(timeValues)-1
-    startIdx = timeValues(i) + 1;  % Adjust index (starting from 1)
-    endIdx = timeValues(i+1);
-    S2(startIdx:endIdx) = outputValues(i);
-end
-assignin('base', 'S2', S2);  % Assign S3 to base workspace
-% Test SG3
-
-% Initialize output vectors with zeros
-S2_SG3 = zeros(1, 100);
-S3_SG3 = zeros(1, 100);
-
-% Define ranges and values for S2_SG3
-ranges_S2 = [10 25; 30 40];
-value_S2 = 1;
-
-% Define range and value for S3_SG3
-range_S3 = [30 40];
-value_S3 = 2;
-
-% Set values for S2_SG3
-for i = 1:size(ranges_S2, 1)
-    startIdx = ranges_S2(i, 1) + 1;  % Adjust index (starting from 1)
-    endIdx = ranges_S2(i, 2);
-    S2_SG3(startIdx:endIdx) = value_S2;
-end
-
-% Set values for S3_SG3
-startIdx_S3 = range_S3(1) + 1;  % Adjust index (starting from 1)
-endIdx_S3 = range_S3(2);
-S3_SG3(startIdx_S3:endIdx_S3) = value_S3;
-assignin('base', 'S2_SG3', S2_SG3);  % Assign S3 to base workspace
-assignin('base', 'S3_SG3', S3_SG3);  % Assign S3 to base workspace
 
 end
 
